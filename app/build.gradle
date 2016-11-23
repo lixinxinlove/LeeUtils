@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+    defaultConfig {
+        applicationId "com.love.leeutils"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        buildConfigField 'String', 'API_SERVER_URL', '"http://lixinxin.me/"'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //C++
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
+    }
+    signingConfigs {//签名的配置
+        release {
+            storeFile file("lee_key.jks")
+            storePassword 'lixinxin252511'
+            keyAlias 'lee'
+            keyPassword 'lixinxin252511'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false //是否启动混淆
+            zipAlignEnabled false//是否启动zipAlign
+            shrinkResources false // 是否移除无用的resource文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release//打包命令行：gradlew assembleRelease
+            applicationVariants.all { variant ->
+                if (variant.buildType.name.equals('release')) {
+                    variant.outputs.each { output ->
+                        def outputFile = output.outputFile
+                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                            def fileName = "LeeUtlis_v${defaultConfig.versionName}_${releaseTime()}_${variant.flavorName}.apk"
+                            output.outputFile = new File(outputFile.parent, fileName)
+                        }
+                    }
+                }
+            }
+            //针对很多渠道
+            productFlavors.all { flavor ->
+                manifestPlaceholders.put("UMENG_CHANNEL_VALUE", name)
+            }
+        }
+    }
+
+    productFlavors {//多渠道打包，命令行打包：gradlew assembleRelease
+        xiaomi {
+            applicationId 'com.wuxiaolong.gradle4android1'
+            //manifestPlaceholders.put("UMENG_CHANNEL_VALUE", 'xiaomi')
+        }
+
+        googlepaly {
+            applicationId 'com.wuxiaolong.gradle4android2'
+            //manifestPlaceholders.put("UMENG_CHANNEL_VALUE", 'googlepaly')
+        }
+    }
+
+    //C++
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:25.0.0'
+}
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+
