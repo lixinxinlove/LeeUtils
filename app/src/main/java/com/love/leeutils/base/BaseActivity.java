@@ -1,5 +1,6 @@
 package com.love.leeutils.base;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +14,8 @@ import com.love.leeutils.exception.AppManager;
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnClickListener {
 
-	public abstract int findContentView();
+    @LayoutRes
+	public abstract int layoutId();
 
 	public abstract void findView();
 
@@ -27,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnClickL
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AppManager.getAppManager().addActivity(this);
-		setContentView(findContentView());
+		setContentView(layoutId());
 		findView();
 		setListener4View();
 		setHeadTitle();
