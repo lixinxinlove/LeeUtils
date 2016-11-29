@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LeeUtils</string>
+    <string name="title_activity_scan_image">ScanImageActivity</string>
 </resources>

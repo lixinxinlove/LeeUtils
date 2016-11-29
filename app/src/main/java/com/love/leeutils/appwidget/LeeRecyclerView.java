@@ -7,18 +7,20 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+
 /**
  * Created by lixinxin on 2016/11/24.
  * 邮箱 895330766@qq.com
- *
+ * <p>
  * 带有加载更多的 RecyclerView
- *
  */
 
 public class LeeRecyclerView extends RecyclerView {
 
     private onLoadMoreListener loadMoreListener;    //加载更多回调
     private boolean isLoadingMore;                  //是否加载更多
+    private Context context;
 
     public LeeRecyclerView(Context context) {
         this(context, null);
@@ -32,6 +34,7 @@ public class LeeRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
         isLoadingMore = false;
         addOnScrollListener(new AutoLoadScrollListener());
+        this.context = context;
     }
 
     public void setLoadMoreListener(onLoadMoreListener loadMoreListener) {
@@ -61,7 +64,11 @@ public class LeeRecyclerView extends RecyclerView {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-
+            if (newState == 0) {   //0闲置    1拖动  2
+                Glide.with(context).resumeRequests();
+            } else {
+                Glide.with(context).pauseRequests();
+            }
             Log.e("Auto", newState + "");
         }
 

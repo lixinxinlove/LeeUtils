@@ -13,6 +13,6 @@ import retrofit2.http.Path;
 
 public interface MeizhiApi  {
 
-    @GET("data/福利/10/{day}")//()里面的是相对路径，当然绝对路径也是可以的
+    @GET("data/福利/30/{day}")//()里面的是相对路径，当然绝对路径也是可以的
     Call<MeizhiData> getMeizhi(@Path("day") int day);//{}里面的是要替换的内容 用注解@Path映射
 }

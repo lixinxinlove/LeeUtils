@@ -17,9 +17,7 @@ public class ImageUtils {
         Glide.with(context)
                 .load(url)
                 .placeholder(R.mipmap.ic_launcher)
+                .dontAnimate()
                 .into(view);
-
     }
-
-
 }

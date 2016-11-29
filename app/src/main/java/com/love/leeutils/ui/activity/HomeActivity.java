@@ -17,7 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
-
+    @BindView(R.id.tv)
     TextView tv;
     @BindView(R.id.image)
     ImageView imageView;
@@ -35,11 +35,6 @@ public class HomeActivity extends BaseActivity {
         Call<MeizhiData> call = ApiServiceManager.getInstance().getMeizhiApi().getMeizhi(1);
         call.enqueue(callback);
 
-    }
-
-    @Override
-    public void findView() {
-        tv = (TextView) findViewById(R.id.tv);
     }
 
     @Override
